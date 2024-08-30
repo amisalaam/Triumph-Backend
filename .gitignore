@@ -1,0 +1,52 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Local development settings
+.env
+
+# Static files
+/staticfiles/
+
+# Media files
+/media/
+
+# Secret key
+*.secret_key
+
+# Database 
+
+*.sqlite3
+
+# IDE specific files
+.idea/
+.vscode/
+
+# Compiled Python files
+*.pyc
+
+# macOS
+.DS_Store
+
+# Byte-compiled files (Windows)
+*.pyo
+*.pyc
+
+# Cache directory
+__pycache__/
+
+# Python egg metadata
+*.egg-info/
+
+# Logs
+log/
+
+# Temporary files
+*.log
+
+# Virtual environment
+venv/
+myenv/
+
+migrations/
