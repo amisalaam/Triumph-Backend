@@ -2,6 +2,7 @@
 
 from pathlib import Path
 from decouple import config
+from datetime import timedelta
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -33,10 +34,19 @@ INSTALLED_APPS = [
     
 #INSTALLED APPS
     'rest_framework',
+    'rest_framework_simplejwt',
     
 # CREATED APPS
     'authentication',
+    
 ]
+
+# REST Framework settings
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
