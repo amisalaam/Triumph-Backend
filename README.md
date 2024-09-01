@@ -1,6 +1,4 @@
-Here’s a sample `README.md` file for your project:
 
-```markdown
 # Triumph-Backend
 
 Triumph-Backend is a Django-based backend application designed for managing user authentication, ticket management, and customer support team details. The project utilizes Django Rest Framework (DRF) for creating API endpoints and Simple JWT for token-based authentication.
