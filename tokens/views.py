@@ -10,10 +10,8 @@ from .serializers import TicketSerializer
 class TicketManagementView(APIView):
     permission_classes = [IsAuthenticated]
     
-    # Create a new ticket (only superuser)
+    # Create a new ticket 
     def post(self, request):
-        if not request.user.is_superuser:
-            return Response({"detail": "Unauthorized: You do not have permission to perform this action."}, status=status.HTTP_401_UNAUTHORIZED)
 
         serializer = TicketSerializer(data=request.data)
         if serializer.is_valid():
@@ -24,7 +22,8 @@ class TicketManagementView(APIView):
     
     #List all tickets with optional filters
     def get(self, request):
-        tickets = Ticket.objects.all()
+        
+        tickets = Ticket.objects.all().order_by('-created_at')
 
         # Apply filters
         status_filter = request.query_params.get('status')
@@ -46,19 +45,25 @@ class TicketManagementView(APIView):
 class TicketDetailView(APIView):
     permission_classes = [IsAuthenticated]
 
-    #Retrieve a specific ticket
     def get(self, request, pk):
         try:
-            ticket = Ticket.objects.get(pk=pk, user=request.user)
+            ticket = Ticket.objects.get(pk=pk)
+            # Check if the user is either the owner or a superuser
+            if ticket.user != request.user and not request.user.is_superuser:
+                return Response({"detail": "You do not have permission to view this ticket."}, status=status.HTTP_403_FORBIDDEN)
+            
             serializer = TicketSerializer(ticket)
             return Response(serializer.data)
         except Ticket.DoesNotExist:
             return Response({"detail": "Not found."}, status=status.HTTP_404_NOT_FOUND)
         
-        
     def put(self, request, pk):
         try:
-            ticket = Ticket.objects.get(pk=pk, user=request.user)
+            ticket = Ticket.objects.get(pk=pk)
+            # Check if the user is either the owner or a superuser
+            if ticket.user != request.user and not request.user.is_superuser:
+                return Response({"detail": "You do not have permission to edit this ticket."}, status=status.HTTP_403_FORBIDDEN)
+
             serializer = TicketSerializer(ticket, data=request.data, partial=True)
             if serializer.is_valid():
                 serializer.save()
@@ -68,16 +73,17 @@ class TicketDetailView(APIView):
             return Response({"detail": "Ticket not found."}, status=status.HTTP_404_NOT_FOUND)
         
     def delete(self, request, pk):
-        # Check if the user is a superuser
-        if not request.user.is_superuser:
-            return Response({"detail": "You do not have permission to delete this ticket."}, status=status.HTTP_403_FORBIDDEN)
-        
         try:
-            ticket = Ticket.objects.get(pk=pk, user=request.user)
+            ticket = Ticket.objects.get(pk=pk)
+            # Check if the user is either the owner or a superuser
+            if ticket.user != request.user and not request.user.is_superuser:
+                return Response({"detail": "You do not have permission to delete this ticket."}, status=status.HTTP_403_FORBIDDEN)
+            
             ticket.delete()
             return Response({"detail": "Ticket deleted."}, status=status.HTTP_204_NO_CONTENT)
         except Ticket.DoesNotExist:
             return Response({"detail": "Ticket not found."}, status=status.HTTP_404_NOT_FOUND)
+
     
     
         
