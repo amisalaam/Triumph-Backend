@@ -71,63 +71,29 @@ Triumph-Backend is a Django-based backend application designed for managing user
 
 ## Configuration
 
-- Ensure you have a `.env` file to set up your environment variables, including settings for the database, JWT tokens, and other Django settings.
+- Ensure you have a `.env` file to set up your environment variables,
 
+Here’s the `API Endpoints` section with the API routes presented in a table format:
+
+```markdown
 ## API Endpoints
 
-### Authentication
+| Endpoint                       | HTTP Method | Description                                 |
+|--------------------------------|-------------|---------------------------------------------|
+| **Authentication**             |             |                                             |
+| `/api/register/`               | POST        | Register a new user                         |
+| `/api/login/`                  | POST        | Login a user and obtain JWT tokens          |
+| **Ticket Management**          |             |                                             |
+| `/api/tickets/`                | POST        | Create a new ticket                         |
+| `/api/tickets/`                | GET         | List all tickets with optional filters      |
+| `/api/tickets/<int:pk>/`       | GET         | Retrieve a specific ticket                  |
+| `/api/tickets/<int:pk>/`       | PUT         | Update a specific ticket                    |
+| `/api/tickets/<int:pk>/`       | DELETE      | Delete a specific ticket                    |
+| **Customer Support Team**      |             |                                             |
+| `/api/customer/support/`       | GET         | List all customer support team members      |
+```
 
-- **Register a new user:**
-
-  ```
-  POST /api/register/
-  ```
-
-- **Login a user:**
-
-  ```
-  POST /api/login/
-  ```
-
-### Ticket Management
-
-- **Create a new ticket:**
-
-  ```
-  POST /api/tickets/
-  ```
-
-- **List all tickets with optional filters:**
-
-  ```
-  GET /api/tickets/
-  ```
-
-- **Retrieve a specific ticket:**
-
-  ```
-  GET /api/tickets/<int:pk>/
-  ```
-
-- **Update a specific ticket:**
-
-  ```
-  PUT /api/tickets/<int:pk>/
-  ```
-
-- **Delete a specific ticket:**
-
-  ```
-  DELETE /api/tickets/<int:pk>/
-  ```
-
-### Customer Support Team
-
-- **List all customer support team members:**
-
-  ```
-  GET /api/customer/support/
-  ```
+This table format provides a clear and concise overview of the API endpoints, making it easier for users to understand the available routes and their functions.
 
 ## Project Structure
 
