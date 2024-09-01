@@ -2,8 +2,8 @@ from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
-from .models import Ticket
-from .serializers import TicketSerializer
+from .models import Ticket, CustomerSupportTeam
+from .serializers import TicketSerializer, CustomerSupportTeamSerializer
 
 
 
@@ -84,8 +84,14 @@ class TicketDetailView(APIView):
         except Ticket.DoesNotExist:
             return Response({"detail": "Ticket not found."}, status=status.HTTP_404_NOT_FOUND)
 
-    
-    
+
+class CustomerSupportTeamListView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        teams = CustomerSupportTeam.objects.all()
+        serializer = CustomerSupportTeamSerializer(teams, many=True)
+        return Response(serializer.data)  
         
 
     
