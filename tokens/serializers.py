@@ -1,6 +1,6 @@
 # serializers.py
 from rest_framework import serializers
-from .models import Ticket
+from .models import Ticket, CustomerSupportTeam
 
 class TicketSerializer(serializers.ModelSerializer):
     class Meta:
@@ -9,3 +9,8 @@ class TicketSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             'user': {'read_only': True},
         }
+
+class CustomerSupportTeamSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomerSupportTeam
+        fields = ['id', 'name']

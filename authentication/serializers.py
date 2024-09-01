@@ -3,7 +3,6 @@ from django.contrib.auth import authenticate
 from rest_framework_simplejwt.tokens import RefreshToken
 from .models import User
 
-
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
@@ -11,15 +10,24 @@ class UserSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             'password': {'write_only': True}
         }
-    
+
     def create(self, validated_data):
-        # Create a new user instance with the validated data
         user = User.objects.create_user(
             email=validated_data['email'],
             fullName=validated_data['fullName'],
             password=validated_data['password']
         )
         return user
+
+    def validate_password(self, value):
+        if len(value) < 6:
+            raise serializers.ValidationError('Password must be at least 6 characters long.')
+        return value
+
+    def validate_email(self, value):
+        if User.objects.filter(email=value).exists():
+            raise serializers.ValidationError('A user with this email already exists.')
+        return value
 
 class LoginSerializer(serializers.Serializer):
     email = serializers.EmailField()
@@ -42,7 +50,7 @@ class LoginSerializer(serializers.Serializer):
             'refresh': tokens['refresh'],
             'access': tokens['access'],
             'user': {
-                'id':user.id,
+                'id': user.id,
                 'email': user.email,
                 'name': user.fullName,
                 'is_superuser': user.is_superuser,
