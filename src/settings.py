@@ -19,7 +19,13 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [ "localhost", "127.0.0.1","localhost:5173"]
+
+# Allowing specific origin
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",
+]
+
 
 
 # Application definition
@@ -35,6 +41,7 @@ INSTALLED_APPS = [
 #INSTALLED APPS
     'rest_framework',
     'rest_framework_simplejwt',
+    'corsheaders',
     
     
 # CREATED APPS
@@ -50,8 +57,17 @@ REST_FRAMEWORK = {
     ),
 }
 
+ 
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=2),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=10),
+  }
+
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',

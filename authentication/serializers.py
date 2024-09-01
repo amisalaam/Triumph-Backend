@@ -36,8 +36,15 @@ class LoginSerializer(serializers.Serializer):
         if not user.is_active:
             raise serializers.ValidationError('This account is inactive')
 
+        tokens = user.tokens()
+
         return {
-            'email': user.email,
-            'fullName': user.fullName,
-            'tokens': user.tokens()
+            'refresh': tokens['refresh'],
+            'access': tokens['access'],
+            'user': {
+                'id':user.id,
+                'email': user.email,
+                'name': user.fullName,
+                'is_superuser': user.is_superuser,
+            }
         }
