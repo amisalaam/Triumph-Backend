@@ -7,7 +7,7 @@ from rest_framework import status
 from rest_framework.response import Response
 
 
-# Create your views here.
+#API view for user registration
 class CreateUserView(APIView):
     serializer_class = UserSerializer
 
@@ -30,6 +30,7 @@ class CreateUserView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
     
+#API view for user login    
 class LoginView(APIView):
     def post(self, request):
         serializer = LoginSerializer(data=request.data)

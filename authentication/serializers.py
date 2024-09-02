@@ -1,8 +1,10 @@
 from rest_framework import serializers
 from django.contrib.auth import authenticate
-from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework.exceptions import ValidationError
 from .models import User
 
+
+# Serializer for user registration
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
@@ -28,7 +30,9 @@ class UserSerializer(serializers.ModelSerializer):
         if User.objects.filter(email=value).exists():
             raise serializers.ValidationError('A user with this email already exists.')
         return value
-
+    
+    
+# Serializer for user login
 class LoginSerializer(serializers.Serializer):
     email = serializers.EmailField()
     password = serializers.CharField(write_only=True)
@@ -36,23 +40,30 @@ class LoginSerializer(serializers.Serializer):
     def validate(self, data):
         email = data.get('email')
         password = data.get('password')
-        user = authenticate(email=email, password=password)
 
-        if user is None:
-            raise serializers.ValidationError('Invalid login credentials')
+        try:
+            user = authenticate(email=email, password=password)
 
-        if not user.is_active:
-            raise serializers.ValidationError('This account is inactive')
+            if user is None:
+                raise ValidationError('Invalid login credentials')
 
-        tokens = user.tokens()
+            if not user.is_active:
+                raise ValidationError('This account is inactive')
 
-        return {
-            'refresh': tokens['refresh'],
-            'access': tokens['access'],
-            'user': {
-                'id': user.id,
-                'email': user.email,
-                'name': user.fullName,
-                'is_superuser': user.is_superuser,
+            tokens = user.tokens()
+
+            return {
+                'refresh': tokens['refresh'],
+                'access': tokens['access'],
+                'user': {
+                    'id': user.id,
+                    'email': user.email,
+                    'name': user.fullName,
+                    'is_superuser': user.is_superuser,
+                }
             }
-        }
+        except ValidationError as e:
+            raise e
+        except Exception as e:
+            # Handle any unexpected exceptions
+            raise ValidationError(f'An error occurred: {str(e)}')
