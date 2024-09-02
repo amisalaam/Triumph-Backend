@@ -10,8 +10,7 @@ Triumph-Backend is a Django-based backend application designed for managing user
 - [Configuration](#configuration)
 - [API Endpoints](#api-endpoints)
 - [Project Structure](#project-structure)
-- [Contributing](#contributing)
-- [License](#license)
+
 
 ## Features
 
